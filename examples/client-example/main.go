@@ -9,12 +9,12 @@ import (
 )
 
 func displayUsage() {
-	fmt.Fprintf(os.Stderr, "Usage: %s proto|json source-name job-name\n", os.Args[0])
+	_, _ = fmt.Fprintf(os.Stderr, "Usage: %s proto|json source-name job-name\n", os.Args[0])
 	os.Exit(1)
 }
 
 func displayInvalidName(arg string) {
-	fmt.Fprintf(os.Stderr, "Invalid %s: allowed characters are a-zA-Z0-9_-\n", arg)
+	_, _ = fmt.Fprintf(os.Stderr, "Invalid %s: allowed characters are a-zA-Z0-9_-\n", arg)
 	os.Exit(1)
 }
 
@@ -36,21 +36,21 @@ func main() {
 	}
 
 	format := os.Args[1]
-	source_name := os.Args[2]
-	job_name := os.Args[3]
+	sourceName := os.Args[2]
+	jobName := os.Args[3]
 	if format != "proto" && format != "json" {
 		displayUsage()
 	}
 
-	if !nameIsValid(source_name) {
+	if !nameIsValid(sourceName) {
 		displayInvalidName("source-name")
 	}
 
-	if !nameIsValid(job_name) {
+	if !nameIsValid(jobName) {
 		displayInvalidName("job-name")
 	}
 
-	labels := "{source=\"" + source_name + "\",job=\"" + job_name + "\"}"
+	labels := "{source=\"" + sourceName + "\",job=\"" + jobName + "\"}"
 	conf := promtail.ClientConfig{
 		PushURL:            "http://localhost:3100/api/prom/push",
 		Labels:             labels,
@@ -78,10 +78,10 @@ func main() {
 
 	for i := 1; i < 5; i++ {
 		tstamp := time.Now().String()
-		loki.Debugf("source = %s time = %s, i = %d\n", source_name, tstamp, i)
-		loki.Infof("source = %s, time = %s, i = %d\n", source_name, tstamp, i)
-		loki.Warnf("source = %s, time = %s, i = %d\n", source_name, tstamp, i)
-		loki.Errorf("source = %s, time = %s, i = %d\n", source_name, tstamp, i)
+		loki.Debugf("source = %s time = %s, i = %d\n", sourceName, tstamp, i)
+		loki.Infof("source = %s, time = %s, i = %d\n", sourceName, tstamp, i)
+		loki.Warnf("source = %s, time = %s, i = %d\n", sourceName, tstamp, i)
+		loki.Errorf("source = %s, time = %s, i = %d\n", sourceName, tstamp, i)
 		time.Sleep(1 * time.Second)
 	}
 
