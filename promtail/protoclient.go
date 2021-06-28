@@ -54,7 +54,7 @@ func (c *clientProto) Errorf(format string, args ...interface{}) {
 	c.log(format, ERROR, "Error: ", args...)
 }
 
-func (c *clientProto) log(format string, level LogLevel, prefix string, args ...interface{}) {
+func (c *clientProto) log(format string, level LogLevel, _ string, args ...interface{}) {
 	if (level >= c.config.SendLevel) || (level >= c.config.PrintLevel) {
 		now := time.Now().UnixNano()
 		c.entries <- protoLogEntry{
@@ -63,7 +63,7 @@ func (c *clientProto) log(format string, level LogLevel, prefix string, args ...
 					Seconds: now / int64(time.Second),
 					Nanos:   int32(now % int64(time.Second)),
 				},
-				Line: fmt.Sprintf(prefix+format, args...),
+				Line: fmt.Sprintf(format, args...),
 			},
 			level: level,
 		}
