@@ -28,7 +28,7 @@ func NewClientProto(conf ClientConfig) (Client, error) {
 	client := clientProto{
 		config:  &conf,
 		quit:    make(chan struct{}),
-		entries: make(chan protoLogEntry, LOG_ENTRIES_CHAN_SIZE),
+		entries: make(chan protoLogEntry, LogEntriesChanSize),
 		client:  httpClient{},
 	}
 

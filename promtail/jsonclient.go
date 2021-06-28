@@ -11,7 +11,7 @@ import (
 type jsonLogEntry struct {
 	Ts    time.Time `json:"ts"`
 	Line  string    `json:"line"`
-	level LogLevel // not used in JSON
+	level LogLevel  // not used in JSON
 }
 
 type promtailStream struct {
@@ -35,7 +35,7 @@ func NewClientJson(conf ClientConfig) (Client, error) {
 	client := clientJson{
 		config:  &conf,
 		quit:    make(chan struct{}),
-		entries: make(chan *jsonLogEntry, LOG_ENTRIES_CHAN_SIZE),
+		entries: make(chan *jsonLogEntry, LogEntriesChanSize),
 		client:  httpClient{},
 	}
 
