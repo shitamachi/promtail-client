@@ -9,9 +9,10 @@ import (
 )
 
 type jsonLogEntry struct {
-	Ts    time.Time `json:"ts"`
-	Line  string    `json:"line"`
-	level LogLevel  // not used in JSON
+	Ts       time.Time `json:"ts"`
+	Line     string    `json:"line"`
+	level    LogLevel  // not used in JSON
+	LevelStr string    `json:"level"`
 }
 
 type promtailStream struct {
@@ -46,27 +47,28 @@ func NewClientJson(conf ClientConfig) (Client, error) {
 }
 
 func (c *clientJson) Debugf(format string, args ...interface{}) {
-	c.log(format, DEBUG, "Debug: ", args...)
+	c.log(format, DEBUG, "debug", args...)
 }
 
 func (c *clientJson) Infof(format string, args ...interface{}) {
-	c.log(format, INFO, "Info: ", args...)
+	c.log(format, INFO, "info", args...)
 }
 
 func (c *clientJson) Warnf(format string, args ...interface{}) {
-	c.log(format, WARN, "Warn: ", args...)
+	c.log(format, WARN, "warn", args...)
 }
 
 func (c *clientJson) Errorf(format string, args ...interface{}) {
-	c.log(format, ERROR, "Error: ", args...)
+	c.log(format, ERROR, "error", args...)
 }
 
-func (c *clientJson) log(format string, level LogLevel, _ string, args ...interface{}) {
+func (c *clientJson) log(format string, level LogLevel, levelStr string, args ...interface{}) {
 	if (level >= c.config.SendLevel) || (level >= c.config.PrintLevel) {
 		c.entries <- &jsonLogEntry{
-			Ts:    time.Now(),
-			Line:  fmt.Sprintf(format, args...),
-			level: level,
+			Ts:       time.Now(),
+			Line:     fmt.Sprintf(format, args...),
+			level:    level,
+			LevelStr: levelStr,
 		}
 	}
 }
